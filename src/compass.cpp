@@ -65,11 +65,11 @@ void Compass::update_min_max(int x, int y, int z){
 }
 
 int Compass::get_x(){
-  return ((x - min_x) / (max_x - min_x)) * 510 - 255;
+  return ((x - min_x) / ((max_x - min_x) * 1.0)) * 510 - 255;
 }
 int Compass::get_y(){
-  return ((y - min_y) / (max_y - min_y)) * 510 - 255;
+  return ((y - min_y) / ((max_y - min_y) * 1.0)) * 510 - 255;
 }
 int Compass::get_z(){
-  return ((z - min_z) / (max_z - min_z)) * 510 - 255;
+  return ((z - min_z) / ((max_z - min_z) * 1.0)) * 510 - 255;
 }
