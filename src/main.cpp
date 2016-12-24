@@ -34,7 +34,7 @@ void loop() {
   if (new_measurement) {
     new_measurement = false;
     compass.read();
-    //motors.set_tones(compass.getX(), compass.getY(), compass.getZ(), now);
+    motors.set_tones(compass.getX(), compass.getY(), compass.getZ(), now);
   }
   motors.update_motors(now);
   handle_serial();

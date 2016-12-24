@@ -23,7 +23,7 @@ void Compass::initialize(){
   Wire.begin();
   Wire.beginTransmission(DEVICE_ADDRESS);
   Wire.write(CTRL_REG_2);
-  Wire.write(AUTO_RESET & RAW);
+  Wire.write(AUTO_RESET + RAW);
   Wire.endTransmission();
 }
 
@@ -31,7 +31,7 @@ void Compass::request_measurement(){
   Serial.print("requesting measure\r\n");
   Wire.beginTransmission(DEVICE_ADDRESS);
   Wire.write(CTRL_REG_1);
-  Wire.write(OVER_SAMPLE_128 & TRIGGER);
+  Wire.write(OVER_SAMPLE_128 + TRIGGER);
   Wire.endTransmission();
 }
 
