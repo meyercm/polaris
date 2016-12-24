@@ -28,7 +28,6 @@ void Compass::initialize(){
 }
 
 void Compass::request_measurement(){
-  Serial.print("requesting measure\r\n");
   Wire.beginTransmission(DEVICE_ADDRESS);
   Wire.write(CTRL_REG_1);
   Wire.write(OVER_SAMPLE_128 + TRIGGER);
@@ -36,7 +35,6 @@ void Compass::request_measurement(){
 }
 
 void Compass::read(){
-  Serial.print("reading\r\n");
   while(Wire.available() > 0){
     Wire.read(); // clear pending reads
   }
