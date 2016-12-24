@@ -28,6 +28,7 @@ void Compass::initialize(){
 }
 
 void Compass::request_measurement(){
+  Serial.print("requesting measure\r\n");
   Wire.beginTransmission(DEVICE_ADDRESS);
   Wire.write(CTRL_REG_1);
   Wire.write(OVER_SAMPLE_128 & TRIGGER);
@@ -35,6 +36,7 @@ void Compass::request_measurement(){
 }
 
 void Compass::read(){
+  Serial.print("reading\r\n");
   while(Wire.available() > 0){
     Wire.read(); // clear pending reads
   }
@@ -45,23 +47,11 @@ void Compass::read(){
   Wire.read(); // ready byte, must read, but can discard
   byte x1 = Wire.read();
   byte x2 = Wire.read();
-  int16_t x = (x1 << 8) | x2;
-  this->x = (int) x;
+  x = (x1 << 8) | x2;
   byte y1 = Wire.read();
   byte y2 = Wire.read();
-  int16_t y = (y1 << 8) | y2;
-  this->y = (int) y;
+  y = (y1 << 8) | y2;
   byte z1 = Wire.read();
   byte z2 = Wire.read();
-  int16_t z = (z1 << 8) | z2;
-  this->z = (int) z;
-
-// FIX:
-  Serial.print(" X: ");
-  Serial.print(this->x);
-  Serial.print(" Y: ");
-  Serial.print(this->y);
-  Serial.print(" Z: ");
-  Serial.print(this->z);
-  Serial.print("\r\n");
+  z = (z1 << 8) | z2;
 }

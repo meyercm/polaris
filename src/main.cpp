@@ -2,10 +2,11 @@
 #include <Wire.h>
 
 #include "main.hpp"
+#include "pins.hpp"
 #include "compass.hpp"
 #include "motors.hpp"
 
-namespace{
+namespace {
   Compass compass;
   Motors motors;
   unsigned long last_measure;
@@ -19,6 +20,7 @@ void setup() {
   attachInterrupt(INT_1, interrupt_handler, RISING);
 
   compass.initialize();
+  motors.initialize();
   last_measure = millis();
 }
 
@@ -32,14 +34,34 @@ void loop() {
   if (new_measurement) {
     new_measurement = false;
     compass.read();
-    motors.set_tones(compass.getX(), compass.getY(), compass.getZ(), now);
+    //motors.set_tones(compass.getX(), compass.getY(), compass.getZ(), now);
   }
   motors.update_motors(now);
   handle_serial();
 }
 
 void handle_serial(){
-
+  switch (Serial.read()) {
+    case -1:
+      break;
+    case 'c':
+      Serial.print(" X: ");
+      Serial.print(compass.getX());
+      Serial.print(" Y: ");
+      Serial.print(compass.getY());
+      Serial.print(" Z: ");
+      Serial.print(compass.getZ());
+      Serial.print("\r\n");
+      break;
+    case 't':
+      Serial.print(" millis: ");
+      Serial.print(millis());
+      Serial.print("\r\n");
+      break;
+    case 'd':
+      Serial.print(compass.x);
+      break;
+  }
 }
 
 void interrupt_handler(void) {

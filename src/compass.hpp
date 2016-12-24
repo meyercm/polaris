@@ -8,11 +8,13 @@ public:
   void initialize();
   void request_measurement();
   void read();
-  int getX() {return x;}
-  int getY() {return y;}
-  int getZ() {return z;}
+  int getX() {return (int)x;}
+  int getY() {return (int)y;}
+  int getZ() {return (int)z;}
 
-private:
-  int x, y, z;
+//private:
+  int16_t x;
+  int16_t y;
+  int16_t z;
 };
 #endif
