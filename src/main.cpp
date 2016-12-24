@@ -34,7 +34,7 @@ void loop() {
   if (new_measurement) {
     new_measurement = false;
     compass.read();
-    motors.set_tones(compass.getX(), compass.getY(), compass.getZ(), now);
+    motors.set_tones(compass.get_x(), compass.get_y(), compass.get_z(), now);
   }
   motors.update_motors(now);
   handle_serial();
@@ -46,11 +46,11 @@ void handle_serial(){
       break;
     case 'c':
       Serial.print(" X: ");
-      Serial.print(compass.getX());
+      Serial.print(compass.get_x());
       Serial.print(" Y: ");
-      Serial.print(compass.getY());
+      Serial.print(compass.get_y());
       Serial.print(" Z: ");
-      Serial.print(compass.getZ());
+      Serial.print(compass.get_z());
       Serial.print("\r\n");
       break;
     case 't':
@@ -59,7 +59,26 @@ void handle_serial(){
       Serial.print("\r\n");
       break;
     case 'd':
+      Serial.print(" raw X: ");
       Serial.print(compass.x);
+      Serial.print(" Y: ");
+      Serial.print(compass.y);
+      Serial.print(" Z: ");
+      Serial.print(compass.z);
+      Serial.print("\r\n");
+      Serial.print("limits x:(");
+      Serial.print(compass.min_x);
+      Serial.print(",");
+      Serial.print(compass.max_x);
+      Serial.print(") y:(");
+      Serial.print(compass.min_y);
+      Serial.print(",");
+      Serial.print(compass.max_y);
+      Serial.print(") z:(");
+      Serial.print(compass.min_z);
+      Serial.print(",");
+      Serial.print(compass.max_z);
+      Serial.print(")\r\n");
       break;
   }
 }

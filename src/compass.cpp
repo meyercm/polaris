@@ -52,4 +52,24 @@ void Compass::read(){
   byte z1 = Wire.read();
   byte z2 = Wire.read();
   z = (z1 << 8) | z2;
+  update_min_max(x, y, z);
+}
+
+void Compass::update_min_max(int x, int y, int z){
+  if (x < min_x) {min_x = x;}
+  if (y < min_y) {min_y = y;}
+  if (z < min_z) {min_z = z;}
+  if (x > max_x) {max_x = x;}
+  if (y > max_y) {max_y = y;}
+  if (z > max_z) {max_z = z;}
+}
+
+int Compass::get_x(){
+  return ((x - min_x) / (max_x - min_x)) * 510 - 255;
+}
+int Compass::get_y(){
+  return ((y - min_y) / (max_y - min_y)) * 510 - 255;
+}
+int Compass::get_z(){
+  return ((z - min_z) / (max_z - min_z)) * 510 - 255;
 }
