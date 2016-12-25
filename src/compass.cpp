@@ -56,6 +56,8 @@ void Compass::read(){
 }
 
 void Compass::update_min_max(int x, int y, int z){
+  // HACK: disable until we get t-digests
+  return;
   if (x < min_x) {min_x = x;}
   if (y < min_y) {min_y = y;}
   if (z < min_z) {min_z = z;}

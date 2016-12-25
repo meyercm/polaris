@@ -81,22 +81,10 @@ void Motors::initialize() {
 }
 
 void Motors::set_tones(int x, int y, int z, unsigned long now){
-  int u = transform_u(x, y, z);
-  int v = transform_v(x, y, z);
-  int w = transform_w(x, y, z);
-  // Serial.print("Tones X: ");
-  // Serial.print(x);
-  // Serial.print(" Y: ");
-  // Serial.print(y);
-  // Serial.print(" Z: ");
-  // Serial.print(z);
-  // Serial.print(" U: ");
-  // Serial.print(u);
-  // Serial.print(" V: ");
-  // Serial.print(v);
-  // Serial.print(" W: ");
-  // Serial.print(w);
-  // Serial.print("\r\n");
+  // HACK: fix the transform
+  int u = x; // transform_u(x, y, z);
+  int v = y; // transform_v(x, y, z);
+  int w = z; // transform_w(x, y, z);
   if (u > 0) {
     motors[POS_U]->set_tone(u, PULSE_DURATION, now);
   } else {
