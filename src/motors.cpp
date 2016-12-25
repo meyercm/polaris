@@ -3,6 +3,11 @@ namespace{
   const int MIN_POWER = 32;
   const int PERIOD = 20;
 
+  const float DIAG_1 = 0.4;
+  const float DIAG_2 = 0.72;
+  const float Z_OFFSET = 0.59;
+  const float X_LINE = 0.84;
+
   class Motor {
   public:
     Motor(byte p_enable_pin, byte p_pwm_pin){
@@ -14,19 +19,10 @@ namespace{
       if (now >= turn_off_time){ turn_off(); }
       if (is_off){ return; }
       int cell = (now - start_time) % PERIOD;
-      // Serial.print("update ");
-      // Serial.print(cell);
-      // Serial.print("\r\n");
-      if (cell == 0) {
-        // Serial.print("power up ");
-        // Serial.print(pwm_pin);
-        // Serial.print("\r\n");
-        digitalWrite(enable_pin, HIGH);
-      } else if (cell == power_level) {
-        // Serial.print("power down ");
-        // Serial.print(pwm_pin);
-        // Serial.print("\r\n")
+      if (cell >= power_level) {
         digitalWrite(enable_pin, LOW);
+      } else {
+        digitalWrite(enable_pin, HIGH);
       }
     }
 
@@ -67,13 +63,13 @@ namespace{
     new Motor(EN_6, PWM_6),
   };
 
-  //indicies into Motors.
-  const byte POS_X = 0;
-  const byte NEG_X = 1;
-  const byte POS_Y = 2;
-  const byte NEG_Y = 3;
-  const byte POS_Z = 4;
-  const byte NEG_Z = 5;
+  // Motor num,  -1 for indicies
+  const byte POS_U = 6           - 1;
+  const byte NEG_U = 2           - 1;
+  const byte POS_V = 1           - 1;
+  const byte NEG_V = 5           - 1;
+  const byte POS_W = 4           - 1;
+  const byte NEG_W = 3           - 1;
 
   const int PULSE_DURATION = 200;
 }
@@ -85,20 +81,36 @@ void Motors::initialize() {
 }
 
 void Motors::set_tones(int x, int y, int z, unsigned long now){
-  if (x > 0) {
-    motors[POS_X]->set_tone(x, PULSE_DURATION, now);
+  int u = transform_u(x, y, z);
+  int v = transform_v(x, y, z);
+  int w = transform_w(x, y, z);
+  // Serial.print("Tones X: ");
+  // Serial.print(x);
+  // Serial.print(" Y: ");
+  // Serial.print(y);
+  // Serial.print(" Z: ");
+  // Serial.print(z);
+  // Serial.print(" U: ");
+  // Serial.print(u);
+  // Serial.print(" V: ");
+  // Serial.print(v);
+  // Serial.print(" W: ");
+  // Serial.print(w);
+  // Serial.print("\r\n");
+  if (u > 0) {
+    motors[POS_U]->set_tone(u, PULSE_DURATION, now);
   } else {
-    motors[NEG_X]->set_tone(abs(x), PULSE_DURATION, now);
+    motors[NEG_U]->set_tone(abs(u), PULSE_DURATION, now);
   }
-  if (y > 0) {
-    motors[POS_Y]->set_tone(y, PULSE_DURATION, now);
+  if (v > 0) {
+    motors[POS_V]->set_tone(v, PULSE_DURATION, now);
   } else {
-    motors[NEG_Y]->set_tone(abs(y), PULSE_DURATION, now);
+    motors[NEG_V]->set_tone(abs(v), PULSE_DURATION, now);
   }
-  if (z > 0) {
-    motors[POS_Z]->set_tone(z, PULSE_DURATION, now);
+  if (w > 0) {
+    motors[POS_W]->set_tone(w, PULSE_DURATION, now);
   } else {
-    motors[NEG_Z]->set_tone(abs(z), PULSE_DURATION, now);
+    motors[NEG_W]->set_tone(abs(w), PULSE_DURATION, now);
   }
 }
 
@@ -106,4 +118,14 @@ void Motors::update_motors(unsigned long now){
   for(int i=0; i < 6; i++){
     motors[i]->update(now);
   }
+}
+
+int Motors::transform_u(int x, int y, int z){
+  return (int)(DIAG_1 * x + DIAG_2 * y + Z_OFFSET * z);
+}
+int Motors::transform_v(int x, int y, int z){
+  return (int)(-DIAG_1 * x + DIAG_2 * y + -Z_OFFSET * z);
+}
+int Motors::transform_w(int x, int y, int z){
+  return (int)(-X_LINE * x + 0 * y + Z_OFFSET * z);
 }

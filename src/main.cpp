@@ -80,6 +80,18 @@ void handle_serial(){
       Serial.print(compass.max_z);
       Serial.print(")\r\n");
       break;
+    case 'm':
+      int x = compass.get_x();
+      int y = compass.get_y();
+      int z = compass.get_z();
+      Serial.print(" U: ");
+      Serial.print(motors.transform_u(x, y, z));
+      Serial.print(" V: ");
+      Serial.print(motors.transform_v(x, y, z));
+      Serial.print(" W: ");
+      Serial.print(motors.transform_w(x, y, z));
+      Serial.print("\r\n");
+      break;
   }
 }
 
