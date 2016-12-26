@@ -81,24 +81,28 @@ void Motors::initialize() {
 }
 
 void Motors::set_tones(int x, int y, int z, unsigned long now){
-  // HACK: fix the transform
-  int u = x; // transform_u(x, y, z);
-  int v = y; // transform_v(x, y, z);
-  int w = z; // transform_w(x, y, z);
-  if (u > 0) {
-    motors[POS_U]->set_tone(u, PULSE_DURATION, now);
-  } else {
-    motors[NEG_U]->set_tone(abs(u), PULSE_DURATION, now);
-  }
-  if (v > 0) {
-    motors[POS_V]->set_tone(v, PULSE_DURATION, now);
-  } else {
-    motors[NEG_V]->set_tone(abs(v), PULSE_DURATION, now);
-  }
-  if (w > 0) {
-    motors[POS_W]->set_tone(w, PULSE_DURATION, now);
-  } else {
-    motors[NEG_W]->set_tone(abs(w), PULSE_DURATION, now);
+  int u = transform_u(x, y, z);
+  int v = transform_v(x, y, z);
+  int w = transform_w(x, y, z);
+
+  if (abs(u) > abs(v) && abs(u) > abs (w)){
+    if (u > 0) {
+      motors[POS_U]->set_tone(u, PULSE_DURATION, now);
+    } else {
+      motors[NEG_U]->set_tone(abs(u), PULSE_DURATION, now);
+    }
+  } else if (abs(v) > abs(u) && abs(v) > abs(w)){
+    if (v > 0) {
+      motors[POS_V]->set_tone(v, PULSE_DURATION, now);
+    } else {
+      motors[NEG_V]->set_tone(abs(v), PULSE_DURATION, now);
+    }
+  } else{
+    if (w > 0) {
+      motors[POS_W]->set_tone(w, PULSE_DURATION, now);
+    } else {
+      motors[NEG_W]->set_tone(abs(w), PULSE_DURATION, now);
+    }
   }
 }
 
