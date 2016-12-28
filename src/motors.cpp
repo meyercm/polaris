@@ -1,6 +1,6 @@
 #include "motors.hpp"
 namespace{
-  const int MIN_POWER = 32;
+  const float MIN_POWER = 0.5;
   const int PERIOD = 20;
 
   class Motor {
@@ -25,12 +25,15 @@ namespace{
     }
 
     void set_tone(int x, int y, int z, int duration, unsigned long now){
+      y = y+1;
+      z = z+1;
       // dot product, result is cos(theta) * magnitude:  0.0-255.0
-      float power = (x * x_coord) + (y * y_coord) + (z * z_coord);
-      if (power > MIN_POWER){
+      float power = (y * y_coord) + (z * z_coord);
+      float power2 = (power*power) / (y*y+z*z);
+      if (power2 > MIN_POWER && power > 0){
         turn_off_time = now + duration;
         //normalize to PERIOD
-        power_level = (int)((power / (255.0)) * PERIOD);
+        power_level = (int)((power2 / (1.0)) * PERIOD);
         start_time = now;
         is_off = false;
       } else {
@@ -56,12 +59,12 @@ namespace{
   };
 
   Motor *motors[] = {
-    new Motor(EN_1, PWM_1, -0.34, 0.8, 0.5), //120
-    new Motor(EN_2, PWM_2, -0.34, -0.8, 0.5), //240
-    new Motor(EN_3, PWM_3, -0.34, 0.0, 0.94), //180
-    new Motor(EN_4, PWM_4, -0.34, 0.0, -0.94), //0
-    new Motor(EN_5, PWM_5, -0.34, -0.8, -0.5), // 300
-    new Motor(EN_6, PWM_6, -0.34, 0.8, -0.5), //60
+    new Motor(EN_1, PWM_1, 0, 0.8, 0.5), //120
+    new Motor(EN_2, PWM_2, 0, -0.8, 0.5), //240
+    new Motor(EN_3, PWM_3, 0, 0.0, 0.94), //180
+    new Motor(EN_4, PWM_4, 0, 0.0, -0.94), //0
+    new Motor(EN_5, PWM_5, 0, -0.8, -0.5), // 300
+    new Motor(EN_6, PWM_6, 0, 0.8, -0.5), //60
   };
   int num_motors = 6;
 
