@@ -58,12 +58,12 @@ namespace{
   Motor *motors[] = {
     new Motor(EN_1, PWM_1, -0.34, 0.8, 0.5), //120
     new Motor(EN_2, PWM_2, -0.34, -0.8, 0.5), //240
-    // new Motor(EN_3, PWM_3), //180
+    new Motor(EN_3, PWM_3, -0.34, 0.0, 0.94), //180
     new Motor(EN_4, PWM_4, -0.34, 0.0, -0.94), //0
-    // new Motor(EN_5, PWM_5), // 300
-    // new Motor(EN_6, PWM_6), //60
+    new Motor(EN_5, PWM_5, -0.34, -0.8, -0.5), // 300
+    new Motor(EN_6, PWM_6, -0.34, 0.8, -0.5), //60
   };
-  int num_motors = 3;
+  int num_motors = 6;
 
   const int PULSE_DURATION = 100;
 }
